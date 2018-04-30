@@ -87,6 +87,7 @@ CREATE TABLE IF NOT EXISTS `visiteur` (
   `cp` char(5) DEFAULT NULL,
   `ville` char(30) DEFAULT NULL,
   `dateEmbauche` date DEFAULT NULL,
+  `fonction` enum('visiteur','comptable') DEFAULT 'visiteur',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
