@@ -23,16 +23,16 @@ CREATE TABLE IF NOT EXISTS `etat` (
 -- Export de la structure de la table gsb. fichefrais
 DROP TABLE IF EXISTS `fichefrais`;
 CREATE TABLE IF NOT EXISTS `fichefrais` (
-  `idVisiteur` char(4) NOT NULL,
+  `idUtilisateur` char(4) NOT NULL,
   `mois` char(6) NOT NULL,
   `nbJustificatifs` int(11) DEFAULT NULL,
   `montantValide` decimal(10,2) DEFAULT NULL,
   `dateModif` date DEFAULT NULL,
   `idEtat` char(2) DEFAULT 'CR',
-  PRIMARY KEY (`idVisiteur`,`mois`),
+  PRIMARY KEY (`idUtilisateur`,`mois`),
   KEY `idEtat` (`idEtat`),
   CONSTRAINT `fichefrais_ibfk_1` FOREIGN KEY (`idEtat`) REFERENCES `etat` (`id`),
-  CONSTRAINT `fichefrais_ibfk_2` FOREIGN KEY (`idVisiteur`) REFERENCES `visiteur` (`id`)
+  CONSTRAINT `fichefrais_ibfk_2` FOREIGN KEY (`idUtilisateur`) REFERENCES `utilisateur` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Les données exportées n'étaient pas sélectionnées.
@@ -49,13 +49,13 @@ CREATE TABLE IF NOT EXISTS `fraisforfait` (
 -- Export de la structure de la table gsb. lignefraisforfait
 DROP TABLE IF EXISTS `lignefraisforfait`;
 CREATE TABLE IF NOT EXISTS `lignefraisforfait` (
-  `idVisiteur` char(4) NOT NULL,
+  `idUtilisateur` char(4) NOT NULL,
   `mois` char(6) NOT NULL,
   `idFraisForfait` char(3) NOT NULL,
   `quantite` int(11) DEFAULT NULL,
-  PRIMARY KEY (`idVisiteur`,`mois`,`idFraisForfait`),
+  PRIMARY KEY (`idUtilisateur`,`mois`,`idFraisForfait`),
   KEY `idFraisForfait` (`idFraisForfait`),
-  CONSTRAINT `lignefraisforfait_ibfk_1` FOREIGN KEY (`idVisiteur`, `mois`) REFERENCES `fichefrais` (`idVisiteur`, `mois`),
+  CONSTRAINT `lignefraisforfait_ibfk_1` FOREIGN KEY (`idUtilisateur`, `mois`) REFERENCES `fichefrais` (`idUtilisateur`, `mois`),
   CONSTRAINT `lignefraisforfait_ibfk_2` FOREIGN KEY (`idFraisForfait`) REFERENCES `fraisforfait` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -64,20 +64,20 @@ CREATE TABLE IF NOT EXISTS `lignefraisforfait` (
 DROP TABLE IF EXISTS `lignefraishorsforfait`;
 CREATE TABLE IF NOT EXISTS `lignefraishorsforfait` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `idVisiteur` char(4) NOT NULL,
+  `idUtilisateur` char(4) NOT NULL,
   `mois` char(6) NOT NULL,
   `libelle` varchar(100) DEFAULT NULL,
   `date` date DEFAULT NULL,
   `montant` decimal(10,2) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `idVisiteur` (`idVisiteur`,`mois`),
-  CONSTRAINT `lignefraishorsforfait_ibfk_1` FOREIGN KEY (`idVisiteur`, `mois`) REFERENCES `fichefrais` (`idVisiteur`, `mois`)
+  KEY `idVisiteur` (`idUtilisateur`,`mois`),
+  CONSTRAINT `lignefraishorsforfait_ibfk_1` FOREIGN KEY (`idUtilisateur`, `mois`) REFERENCES `fichefrais` (`idUtilisateur`, `mois`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Les données exportées n'étaient pas sélectionnées.
--- Export de la structure de la table gsb. visiteur
-DROP TABLE IF EXISTS `visiteur`;
-CREATE TABLE IF NOT EXISTS `visiteur` (
+-- Export de la structure de la table gsb. utilisateur
+DROP TABLE IF EXISTS `utilisateur`;
+CREATE TABLE IF NOT EXISTS `utilisateur` (
   `id` char(4) NOT NULL,
   `nom` char(30) DEFAULT NULL,
   `prenom` char(30) DEFAULT NULL,

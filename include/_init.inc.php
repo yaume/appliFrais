@@ -15,12 +15,12 @@
   // Demande-t-on une déconnexion ?
   $demandeDeconnexion = lireDonneeUrl("cmdDeconnecter");
   if ( $demandeDeconnexion == "on") {
-      deconnecterVisiteur();
+      deconnecterUtilisateur();
       header("Location: cAccueil.php");
   }
     
   // établissement d'une connexion avec le serveur de données 
-  // puis sélection de la BD qui contient les données des visiteurs et de leurs frais
+  // puis sélection de la BD qui contient les données des utilisateurs et de leurs frais
   $idConnexion=connecterServeurBD();
   if (!$idConnexion) {
       ajouterErreur($tabErreurs, "Echec de la connexion au serveur MySql");

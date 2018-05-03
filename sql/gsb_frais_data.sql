@@ -24,7 +24,7 @@ INSERT INTO `etat` (`id`, `libelle`) VALUES
 -- Export de données de la table gsb.fichefrais : ~0 rows (environ)
 DELETE FROM `fichefrais`;
 /*!40000 ALTER TABLE `fichefrais` DISABLE KEYS */;
-INSERT INTO `fichefrais` (`idVisiteur`, `mois`, `nbJustificatifs`, `montantValide`, `dateModif`, `idEtat`) VALUES
+INSERT INTO `fichefrais` (`idUtilisateur`, `mois`, `nbJustificatifs`, `montantValide`, `dateModif`, `idEtat`) VALUES
 	('a131', '201804', 0, NULL, '2018-04-28', 'CR');
 /*!40000 ALTER TABLE `fichefrais` ENABLE KEYS */;
 
@@ -41,7 +41,7 @@ INSERT INTO `fraisforfait` (`id`, `libelle`, `montant`) VALUES
 -- Export de données de la table gsb.lignefraisforfait : ~4 rows (environ)
 DELETE FROM `lignefraisforfait`;
 /*!40000 ALTER TABLE `lignefraisforfait` DISABLE KEYS */;
-INSERT INTO `lignefraisforfait` (`idVisiteur`, `mois`, `idFraisForfait`, `quantite`) VALUES
+INSERT INTO `lignefraisforfait` (`idUtilisateur`, `mois`, `idFraisForfait`, `quantite`) VALUES
 	('a131', '201804', 'ETP', 0),
 	('a131', '201804', 'KM', 0),
 	('a131', '201804', 'NUI', 0),
@@ -53,10 +53,10 @@ DELETE FROM `lignefraishorsforfait`;
 /*!40000 ALTER TABLE `lignefraishorsforfait` DISABLE KEYS */;
 /*!40000 ALTER TABLE `lignefraishorsforfait` ENABLE KEYS */;
 
--- Export de données de la table gsb.visiteur : ~27 rows (environ)
-DELETE FROM `visiteur`;
-/*!40000 ALTER TABLE `visiteur` DISABLE KEYS */;
-INSERT INTO `visiteur` (`id`, `nom`, `prenom`, `login`, `mdp`, `adresse`, `cp`, `ville`, `dateEmbauche`, `fonction`) VALUES
+-- Export de données de la table gsb.utilisateur : ~27 rows (environ)
+DELETE FROM `utilisateur`;
+/*!40000 ALTER TABLE `utilisateur` DISABLE KEYS */;
+INSERT INTO `utilisateur` (`id`, `nom`, `prenom`, `login`, `mdp`, `adresse`, `cp`, `ville`, `dateEmbauche`, `fonction`) VALUES
 	('a131', 'Villechalane', 'Louis', 'lvillachane', 'jux7g', '8 rue des Charmes', '46000', 'Cahors', '2005-12-21', 'comptable'),
 	('a17', 'Andre', 'David', 'dandre', 'oppg5', '1 rue Petit', '46200', 'Lalbenque', '1998-11-23', 'visiteur'),
 	('a55', 'Bedos', 'Christian', 'cbedos', 'gmhxd', '1 rue Peranud', '46250', 'Montcuq', '1995-01-12', 'visiteur'),
@@ -84,7 +84,7 @@ INSERT INTO `visiteur` (`id`, `nom`, `prenom`, `login`, `mdp`, `adresse`, `cp`, 
 	('f21', 'Finck', 'Jacques', 'jfinck', 'mpb3t', '10 avenue du Prado', '13002', 'Marseille', '2001-11-10', 'visiteur'),
 	('f39', 'Frémont', 'Fernande', 'ffremont', 'xs5tq', '4 route de la mer', '13012', 'Allauh', '1998-10-01', 'visiteur'),
 	('f4', 'Gest', 'Alain', 'agest', 'dywvt', '30 avenue de la mer', '13025', 'Berre', '1985-11-01', 'visiteur');
-/*!40000 ALTER TABLE `visiteur` ENABLE KEYS */;
+/*!40000 ALTER TABLE `utilisateur` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
