@@ -1,3 +1,3 @@
 # appliFrais
 
-Apllication exercice pour BST SIO SLAM
+Application exercice pour BST SIO SLAM
