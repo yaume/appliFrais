@@ -1,0 +1,16 @@
+{
+    "name": "guillaume/appli-frais",
+    "description": "Application web BTS SIO SLAM",
+    "type": "project",
+    "require": {
+    },
+    "authors": [
+        {
+            "name": "Guillaume",
+            "email": "guillaume@ordi-service.fr"
+        }
+    ],
+    "require-dev": {
+        "phpdocumentor/phpdocumentor": "^2.9"
+    }
+}

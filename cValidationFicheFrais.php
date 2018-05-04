@@ -1,20 +1,15 @@
 <?php
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Script de contrôle et d'affichage du cas d'utilisation "Valider fiche de frais"
+ * @package default
+ * @todo  RAS
  */
 $repInclude = './include/';
 require($repInclude . "_init.inc.php");
-if (estUtilisateurConnecte()) {
-    $idUser = obtenirIdUserConnecte();
-    $lgUser = obtenirDetailUtilisateur($idConnexion, $idUser);
-    $fonction = $lgUser ['fonction'];
-}
-// page inaccessible si utilisateur non connecté  ou si utilisateur est un utilisateur médical
-if (!estUtilisateurConnecte() || $fonction == 'visiteur') {
-    header("Location: cAcceuil.php");
-}
+   // page inaccessible si visiteur non connecté  ou si utilisateur est un visiteur médical
+  if(!estUtilisateurConnecte() || $_SESSION["foncUser"] != "comptable"){
+      header("Location: cAccueil.php");
+  }
 require($repInclude . "_entete.inc.html");
 require($repInclude . "_sommaire.inc.php");
 $fiches = obtenirFiches($idConnexion);
@@ -35,10 +30,10 @@ $fiches = obtenirFiches($idConnexion);
             </tr>
             <?php foreach ($fiches as $fiche) { ?>
                 <tr>
-                    <td><?php echo $fiche['nom']; ?></td>
-                    <td><?php echo $fiche['prenom']; ?></td>
-                    <td><a href="cAffichageFicheFrais.php?id=<?php echo $fiche['id'] ?>"> lien vers la fiche </a></td>
-                    <td><?php echo $fiche['etat']; ?></td>
+                    <td><?php echo $fiche['nom']?></td>
+                    <td><?php echo $fiche['prenom']?></td>
+                    <td><a href="cAffichageFiche.php?mois=<?php echo $fiche['mois']?>&utilisateur=<?php echo $fiche['utilisateur']?>"> lien vers la fiche </a></td>
+                    <td><?php echo $fiche['etat'];?></td>
                 </tr>
                 <?php
             }
@@ -52,3 +47,9 @@ $fiches = obtenirFiches($idConnexion);
     ?>
 
 </div>
+<?php
+  require($repInclude . "_pied.inc.html");
+  require($repInclude . "_fin.inc.php");
+?>
+
+
