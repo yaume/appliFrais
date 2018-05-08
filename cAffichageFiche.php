@@ -1,4 +1,6 @@
 <?php
+
+
 /*
  * Script de contrôle et d'affichage du cas d'utilisation "Valider fiche de frais"
  * @package default
@@ -13,15 +15,16 @@ if (!estUtilisateurConnecte() || $_SESSION["foncUser"] != "comptable") {
 }
 require($repInclude . "_entete.inc.html");
 require($repInclude . "_sommaire.inc.php");
-$mois = filter_input(INPUT_GET, 'mois');
-$utilisateur = filter_input(INPUT_GET, 'utilisateur');
+$mois = lireDonneeUrl('mois',"");
+$utilisateur = lireDonneeUrl('utilisateur', "");
 $fiche = obtenirFiche($idConnexion, $mois, $utilisateur);
 $date = str_split($fiche['mois'], 4);
-setlocale(LC_TIME, "fr_FR");
-$datemodif = strtotime($fiche['dateModif']);
-$datemodif = date('d/m/Y', $datemodif);
+$datemodif = date('d/m/Y',strtotime($fiche['dateModif']));
 $lignes = ligneForfais($idConnexion, $mois, $utilisateur);
 $horsforfait = horsforfait($idConnexion, $mois, $utilisateur);
+$etape=lireDonneePost("etape","attenteSaisie");
+$tabErr = array();
+
 ?>
 <div id="contenu">
     <h2>Fiche <?php echo $date[1] . "/" . $date[0] . " " . $fiche['nom'] . " " . $fiche['prenom'] . " " . $datemodif; ?> </h2>
@@ -75,7 +78,7 @@ $horsforfait = horsforfait($idConnexion, $mois, $utilisateur);
             <td><?php
             $totalhors = 0;
             foreach ($horsforfait as $ligne){
-                $total += $ligne['montant'];
+                $totalhors += $ligne['montant'];
             }
             echo $totalhors;
         endif;
@@ -83,6 +86,55 @@ $horsforfait = horsforfait($idConnexion, $mois, $utilisateur);
             </td>
         </tr>
     </table>
+    <table>
+        <tr>
+            <th> Total fiche</th>
+            <td><?php if ($horsforfait) {echo $total + $totalhors;}else{ echo $total;}?></td>
+        </tr>
+    </table>
+        <?php
+    $nbdep = obtenirNbJustificatif($idConnexion,$mois, $utilisateur);
+  if ($etape == "validerSaisie" ) {
+      if (nbErreurs($tabErr) > 0) {
+          echo toStringErreurs($tabErr);
+      } 
+      else {
+?>
+      <p class="info">Les modifications de la fiche de frais ont bien été enregistrées</p>        
+<?php
+      }   
+  }
+      ?>
+     <form action="" method="post" class="corpsForm">
+         <div class="corpsForm">
+        <input type="hidden" name="etape" value="validerSaisie" />
+        <label for="nbJus">Justificatifs&nbsp;: </label>
+        <input type="text" id="nbJus"
+               size ="2"
+               name="nbjus" 
+               title="Entrez le nombre de justificatis" 
+               value="<?php echo $nbdep ?>" />
+         </div>
+        <p class="piedForm">
+            <input id="ok" type="submit" value="Valider" size="20" 
+                   title="Valider la fiche" />
+            <input id="annuler" type="reset" value="Effacer" size="20" />
+        </p>
+    </form>
+    <?php 
+    $nb = lireDonneePost("nbjus", filter_input(INPUT_POST, 'nbjus'));
+    if(filter_input(INPUT_POST, 'nbjus')){
+    $ok = verifierEntiersPositifs(array($nb));
+    if(!$ok){
+        ajouterErreur($tabErr, "Le nombre de justificatifs doit être superieur à zéro");
+        echo toStringErreurs($tabErr);
+    }
+ else {
+        validerFicheFrais($idConnexion, $mois, $utilisateur, $nb);
+        header('Location: cValidationFicheFrais.php?message=validee');
+    }
+}
+?>
 </div>
 <?php
 require($repInclude . "_pied.inc.html");

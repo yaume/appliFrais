@@ -1,7 +1,7 @@
 <?php
 /*
  * Script de contrôle et d'affichage du cas d'utilisation "Valider fiche de frais"
- * @package default
+ * @package Default
  * @todo  RAS
  */
 $repInclude = './include/';
@@ -13,9 +13,15 @@ require($repInclude . "_init.inc.php");
 require($repInclude . "_entete.inc.html");
 require($repInclude . "_sommaire.inc.php");
 $fiches = obtenirFiches($idConnexion);
+$message = lireDonneeUrl('message', "");
 ?>
 <div id=contenu>
     <?php
+    if($message == "validee"){
+        ?>
+    <p class="info">Fiche validée</p>
+    <?php
+    }
     ?>
     <h2> Validation des fiches de frais </h2>
     <?php

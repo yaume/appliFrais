@@ -17,17 +17,17 @@
             $fonction = $lgUser['fonction'];
             ?>
             <h2>
-            <?php
-            echo $nom . "</br>" . $prenom;
-            ?>
+                <?php
+                echo $nom . "</br>" . $prenom;
+                ?>
             </h2>
-    <?php
-}
-?>  
+            <?php
+        }
+        ?>  
     </div>  
-        <?php
-        if (estUtilisateurConnecte() && $fonction == 'visiteur') {
-            ?>
+    <?php
+    if (estUtilisateurConnecte() && $fonction == 'visiteur') {
+        ?>
         <h3>Visiteur médical</h3>
         <ul id="menuList">
             <li class="smenu">
@@ -39,13 +39,13 @@
             <li class="smenu">
                 <a href="cConsultFichesFrais.php" title="Consultation de mes fiches de frais">Mes fiches de frais</a>
             </li>
-    <?php
-    // affichage des éventuelles erreurs déjà détectées
-    if (nbErreurs($tabErreurs) > 0) {
-        echo toStringErreurs($tabErreurs);
-    }
-} else {
-    ?>
+            <?php
+            // affichage des éventuelles erreurs déjà détectées
+            if (nbErreurs($tabErreurs) > 0) {
+                echo toStringErreurs($tabErreurs);
+            }
+        } else {
+            ?>
             <h3>Comptable</h3>
             <ul id="menuList">
                 <li class="smenu">
@@ -55,15 +55,15 @@
                     <a href="cValidationFicheFrais.php" title="Validation des fiches de frais">Validation des fiches de frais</a>
                 </li>
                 <li class="smenu">
-                    <a href="cConsultFichesFrais.php" title="Consultation de mes fiches de frais">Mes fiches de frais</a>
+                    <a href="cSuiviPaiement.php" title="Suivie des payement">Suivie des payements</a>
                 </li>
-    <?php
-    // affichage des éventuelles erreurs déjà détectées
-    if (nbErreurs($tabErreurs) > 0) {
-        echo toStringErreurs($tabErreurs);
-    }
-}
-?>
+                <?php
+                // affichage des éventuelles erreurs déjà détectées
+                if (nbErreurs($tabErreurs) > 0) {
+                    echo toStringErreurs($tabErreurs);
+                }
+            }
+            ?>
             <li class="smenu">
                 <a href="cSeDeconnecter.php" title="Se déconnecter">Se déconnecter</a>
             </li>

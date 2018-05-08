@@ -1,12 +1,14 @@
 <?php
+
 /** 
  * Regroupe les fonctions de gestion d'une session utilisateur.
- * @package default
- * @todo  RAS
+ * 
+ * @package Default
+ * @todo    RAS
  */
 
 /** 
- * Démarre ou poursuit une session.                     
+ * Démarre ou poursuit une session.
  *
  * @return void
  */
@@ -34,6 +36,7 @@ function obtenirIdUserConnecte() {
  * Conserve en variables session l'id $id et le login $login du utilisateur connecté
  * @param string id du utilisateur
  * @param string login du utilisateur
+ * @param string $fonction fonction de l'utilisateur
  * @return void    
  */
 function affecterInfosConnecte($id, $login,$fonction) {

@@ -2,7 +2,7 @@
 
 /**
  * Regroupe les fonctions d'accès aux données.
- * @package default
+ * @package Default
  * @author Arthur Martin
  * @todo Fonctions retournant plusieurs lignes sont à réécrire.
  */
@@ -54,6 +54,7 @@ function deconnecterServeurBD($idCnx) {
  * Echappe les caractères spéciaux d'une chaîne.
  * Envoie la chaîne $str échappée, càd avec les caractères considérés spéciaux
  * par MySql (tq la quote simple) précédés d'un \, ce qui annule leur effet spécial
+ * @param string $idCnx Connexion base
  * @param string $str chaîne à échapper
  * @return string chaîne échappée 
  */
@@ -220,7 +221,8 @@ function obtenirReqMoisFicheFrais($unIdUtilisateur) {
  * 
  * La requête de sélection fournie permettra d'obtenir l'id, le libellé et la
  * quantité des éléments forfaitisés de la fiche de frais du utilisateur
- * d'id $idUtilisateur pour le mois $mois    
+ * d'id $idUtilisateur pour le mois $mois
+ * @param string $idCnx Connexion base
  * @param string $unMois mois demandé (MMAAAA)
  * @param string $unIdUtilisateur id utilisateur  
  * @return string texte de la requête select
@@ -240,6 +242,7 @@ function obtenirReqEltsForfaitFicheFrais($idCnx, $unMois, $unIdUtilisateur) {
  * La requête de sélection fournie permettra d'obtenir l'id, la date, le libellé 
  * et le montant des éléments hors forfait de la fiche de frais du utilisateur
  * d'id $idUtilisateur pour le mois $mois    
+ * @param string $idCnx Connexion base
  * @param string $unMois mois demandé (MMAAAA)
  * @param string $unIdUtilisateur id utilisateur  
  * @return string texte de la requête select
@@ -253,9 +256,28 @@ function obtenirReqEltsHorsForfaitFicheFrais($idCnx, $unMois, $unIdUtilisateur) 
 }
 
 /**
+ * 
+ * @param string $idCnx
+ * @param string $unMois
+ * @param string $unIdUtilisateur
+ * @return array
+ */
+function obtenirNbJustificatif($idCnx, $unMois, $unIdUtilisateur) {
+    $requete = "select nbJustificatifs from fichefrais
+              where idUtilisateur='" . $unIdUtilisateur . "' and mois='" . $unMois . "'";
+    $idJeuxNb = $idCnx->query($requete);
+    $nbarrray = $idJeuxNb->fetch_assoc();
+    $nb = $nbarrray['nbJustificatifs'];
+    $idJeuxNb->free_result();
+
+    return $nb;
+}
+
+/**
  * Supprime une ligne hors forfait.
  * Supprime dans la BD la ligne hors forfait d'id $unIdLigneHF
  * @param resource $idCnx identifiant de connexion
+ * @param string $idCnx Connexion base
  * @param string $idLigneHF id de la ligne hors forfait
  * @return void
  */
@@ -279,7 +301,7 @@ function supprimerLigneHF($idCnx, $unIdLigneHF) {
  */
 function ajouterLigneHF($idCnx, $unMois, $unIdUtilisateur, $uneDateHF, $unLibelleHF, $unMontantHF) {
     $unLibelleHF = filtrerChainePourBD($idCnx, $unLibelleHF);
-    $uneDateHF = filtrerChainePourBD(convertirDateFrancaisVersAnglais($uneDateHF));
+    $uneDateHF = filtrerChainePourBD($idCnx, convertirDateFrancaisVersAnglais($uneDateHF));
     $unMois = filtrerChainePourBD($idCnx, $unMois);
     $requete = "insert into LigneFraisHorsForfait(idUtilisateur, mois, date, libelle, montant) 
                 values ('" . $unIdUtilisateur . "','" . $unMois . "','" . $uneDateHF . "','" . $unLibelleHF . "'," . $unMontantHF . ")";
@@ -298,7 +320,7 @@ function ajouterLigneHF($idCnx, $unMois, $unIdUtilisateur, $uneDateHF, $unLibell
  * @param string $unIdUtilisateur  id utilisateur
  * @param array $desEltsForfait tableau des quantités des éléments hors forfait
  * avec pour clés les identifiants des frais forfaitisés 
- * @return void  
+ * @return void 
  */
 function modifierEltsForfait($idCnx, $unMois, $unIdUtilisateur, $desEltsForfait) {
     $unMois = filtrerChainePourBD($idCnx, $unMois);
@@ -309,6 +331,22 @@ function modifierEltsForfait($idCnx, $unMois, $unIdUtilisateur, $desEltsForfait)
                 . $unMois . "' and idFraisForfait='" . $idFraisForfait . "'";
         $idCnx->query($requete);
     }
+}
+
+/**
+ * 
+ * @param strring $idCnx
+ * @param string $mois
+ * @param string $utilisateur
+ * @param string $nbjus
+ */
+function validerFicheFrais($idCnx, $mois, $utilisateur, $nbjus) {
+    var_dump($nbjus);
+    $requete = "UPDATE fichefrais
+                SET nbJustificatifs = $nbjus, idEtat = 'VA'
+                WHERE idUtilisateur = '$utilisateur' AND mois = '$mois'";
+    $idCnx->query($requete);
+    $idCnx->close;
 }
 
 /**
@@ -345,6 +383,7 @@ function verifierInfosConnexion($idCnx, $unLogin, $unMdp) {
  * @param resource $idCnx identifiant de connexion
  * @param string $unIdUtilisateur 
  * @param string $unMois mois sous la forme aaaamm
+ * @param string $unEtat 
  * @return void 
  */
 function modifierEtatFicheFrais($idCnx, $unMois, $unIdUtilisateur, $unEtat) {
@@ -354,6 +393,11 @@ function modifierEtatFicheFrais($idCnx, $unMois, $unIdUtilisateur, $unEtat) {
     $idCnx->query($requete);
 }
 
+/**
+ * 
+ * @param string $idCnx
+ * @return array
+ */
 function obtenirFiches($idCnx) {
     $requete = "SELECT id, nom, prenom, idEtat, idUtilisateur, mois
                 FROM utilisateur
@@ -391,12 +435,13 @@ function obtenirFiche($idCnx, $date, $util) {
     $idJeuRes->free_result();
     return $fiche;
 }
-function ligneForfais($idCnx, $date, $util){
+
+function ligneForfais($idCnx, $date, $util) {
     $requete = "SELECT idUtilisateur, mois, quantite, libelle, montant
                 FROM lignefraisforfait
                 INNER JOIN fraisforfait ON lignefraisforfait.idFraisForfait = fraisforfait.id
                 WHERE idUtilisateur = '$util' and mois = '$date'";
-        $idJeuRes = $idCnx->query($requete);
+    $idJeuRes = $idCnx->query($requete);
     $lignes = false;
     if ($idJeuRes) {
         while ($ligne = $idJeuRes->fetch_assoc()) {
@@ -412,16 +457,17 @@ function ligneForfais($idCnx, $date, $util){
     }
     return $lignes;
 }
-function horsForfait($idCnx, $date, $util){
-        $requete = "SELECT libelle, date, montant
+
+function horsForfait($idCnx, $date, $util) {
+    $requete = "SELECT libelle, date, montant
                 FROM lignefraishorsforfait
                 WHERE idUtilisateur = '$util' and mois = '$date'";
-        $idJeuRes = $idCnx->query($requete);
+    $idJeuRes = $idCnx->query($requete);
     $lignes = false;
     if ($idJeuRes) {
         while ($ligne = $idJeuRes->fetch_assoc()) {
             $lignes [] = array(
-                'quantite' => $ligne['quantite'],
+                'montant' => $ligne['montant'],
                 'libelle' => $ligne['libelle'],
                 'date' => $ligne['date']
             );
@@ -430,4 +476,45 @@ function horsForfait($idCnx, $date, $util){
     }
     return $lignes;
 }
+
+function obtenirMoisFiche($idCnx) {
+    $requete = "SELECT DISTINCT  mois FROM ficheFrais 
+                WHERE idEtat = 'VA'";
+    $idJeuRes = $idCnx->query($requete);
+    if ($idJeuRes) {
+        while ($ligne = $idJeuRes->fetch_assoc()) {
+            $lgMois [] = array(
+                'mois' => $ligne['mois'],
+            );
+        }
+        $idJeuRes->free_result();
+    }
+    return $lgMois;
+}
+
+function obtenirFichesValide($idCnx, $unMois) {
+    $requete = " SELECT id, nom, prenom, mois, idEtat
+            FROM fichefrais
+            INNER JOIN utilisateur ON FicheFrais.idUtilisateur = utilisateur.id
+            WHERE idEtat = 'VA' AND mois='$unMois'
+             OR idEtat = 'MP' AND mois='$unMois'
+             ORDER BY nom ";
+
+    $idJeuRes = $idCnx->query($requete);
+    $fiches = false;
+    if ($idJeuRes) {
+        while ($fiche = $idJeuRes->fetch_assoc()) {
+            $fiches[] = array(
+                'id' => $fiche['id'],
+                'nom' => $fiche['nom'],
+                'prenom' => $fiche['prenom'],
+                'mois' => $fiche['mois'],
+                'etat' => $fiche['idEtat']
+            );
+        }
+         $idJeuRes -> free_result();
+    }
+    return $fiches;
+}
+
 ?>

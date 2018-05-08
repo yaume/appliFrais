@@ -25,7 +25,7 @@ INSERT INTO `etat` (`id`, `libelle`) VALUES
 DELETE FROM `fichefrais`;
 /*!40000 ALTER TABLE `fichefrais` DISABLE KEYS */;
 INSERT INTO `fichefrais` (`idUtilisateur`, `mois`, `nbJustificatifs`, `montantValide`, `dateModif`, `idEtat`) VALUES
-	('a131', '201804', 0, NULL, '2018-04-28', 'CR');
+	('a17', '201803', 0, NULL, '2018-02-28', 'CR');
 /*!40000 ALTER TABLE `fichefrais` ENABLE KEYS */;
 
 -- Export de données de la table gsb.fraisforfait : ~4 rows (environ)
@@ -42,10 +42,10 @@ INSERT INTO `fraisforfait` (`id`, `libelle`, `montant`) VALUES
 DELETE FROM `lignefraisforfait`;
 /*!40000 ALTER TABLE `lignefraisforfait` DISABLE KEYS */;
 INSERT INTO `lignefraisforfait` (`idUtilisateur`, `mois`, `idFraisForfait`, `quantite`) VALUES
-	('a131', '201804', 'ETP', 0),
-	('a131', '201804', 'KM', 0),
-	('a131', '201804', 'NUI', 0),
-	('a131', '201804', 'REP', 0);
+	('a17', '201803', 'ETP', 0),
+	('a17', '201803', 'KM', 0),
+	('a17', '201803', 'NUI', 0),
+	('a17', '201803', 'REP', 0);
 /*!40000 ALTER TABLE `lignefraisforfait` ENABLE KEYS */;
 
 -- Export de données de la table gsb.lignefraishorsforfait : ~0 rows (environ)
